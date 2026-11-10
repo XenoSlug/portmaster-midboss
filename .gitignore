@@ -1,0 +1,8 @@
+# Ignore copyrighted game data
+gamedata/*
+!gamedata/.gitkeep
+savedata/
+tmp*/
+log.txt
+*.log
+.DS_Store

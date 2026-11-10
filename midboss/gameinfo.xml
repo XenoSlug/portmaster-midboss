@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gameList>
+  <game>
+    <path>./MidBoss.sh</path>
+    <name>MidBoss</name>
+    <desc>Kill your enemies, possess their bodies, and take their abilities to become the ultimate dungeon boss in this tactical roguelike.</desc>
+    <releasedate>20170523T000000</releasedate>
+    <developer>Kitsune Games</developer>
+    <publisher>Kitsune Games</publisher>
+    <genre>RPG / Roguelike</genre>
+    <players>1</players>
+  </game>
+</gameList>

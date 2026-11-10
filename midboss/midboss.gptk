@@ -1,0 +1,32 @@
+back = m
+start = esc
+
+a = enter
+b = space
+x = p
+y = i
+
+l1 = q
+l2 = 1
+r1 = e
+r2 = 2
+
+up = up
+down = down
+left = left
+right = right
+
+left_analog_up = up
+left_analog_down = down
+left_analog_left = left
+left_analog_right = right
+
+right_analog_up = \"
+right_analog_down = \"
+right_analog_left = \"
+right_analog_right = \"
+
+deadzone_mode = axial
+deadzone = 2000
+deadzone_scale = 8
+deadzone_delay = 16
