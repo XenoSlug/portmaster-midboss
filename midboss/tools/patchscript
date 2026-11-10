@@ -17,8 +17,8 @@ cleanup() {
 }
 trap cleanup EXIT
 
-# 1. Search for MidBoss Linux binary or archive in gamedata
-BIN_FILE=$(find "$GAMEDATA" -maxdepth 1 -name "*MidBoss*bin*" -o -name "*midboss*bin*" | head -n 1)
+# 1. Search for MidBoss Linux binary or archive in gamedata or gamedir
+BIN_FILE=$(find "$GAMEDATA" "$GAMEDIR" -maxdepth 2 -iname "*midboss*bin*" | head -n 1)
 
 if [ -n "$BIN_FILE" ]; then
     echo "Found MidBoss Linux installer/binary: $BIN_FILE"
@@ -58,8 +58,8 @@ if pos != -1:
 EOF
 fi
 
-# Also check for standard zip archive
-ZIP_FILE=$(find "$GAMEDATA" -maxdepth 1 -name "*.zip" | head -n 1)
+# Also check for standard zip archive in gamedata or gamedir
+ZIP_FILE=$(find "$GAMEDATA" "$GAMEDIR" -maxdepth 2 -iname "*midboss*.zip" | head -n 1)
 if [ -n "$ZIP_FILE" ] && [ ! -f "$GAMEDATA/MidBoss.exe" ]; then
     echo "Extracting zip archive: $ZIP_FILE"
     unzip -o -q "$ZIP_FILE" -d "$GAMEDATA"
