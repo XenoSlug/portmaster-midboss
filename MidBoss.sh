@@ -22,13 +22,18 @@ cd "$GAMEDIR"
 > "$GAMEDIR/log.txt" && exec > >(tee "$GAMEDIR/log.txt") 2>&1
 
 # Auto-copy boxart to muOS catalogue if running on muOS
-for muos_box in "/mnt/mmc/MUOS/info/catalogue/Ports/box" "/mnt/sdcard/MUOS/info/catalogue/Ports/box"; do
-    if [ -d "$muos_box" ] && [ ! -f "$muos_box/MidBoss.png" ]; then
-        cp "$GAMEDIR/cover.png" "$muos_box/MidBoss.png" 2>/dev/null
+for cat_dir in "/mnt/mmc/MUOS/info/catalogue" "/mnt/sdcard/MUOS/info/catalogue"; do
+    if [ -d "$cat_dir" ]; then
+        for pdir in "Ports" "PORTS" "ports"; do
+            mkdir -p "$cat_dir/$pdir/box" "$cat_dir/$pdir/preview" 2>/dev/null
+            cp -f "$GAMEDIR/cover.png" "$cat_dir/$pdir/box/MidBoss.png" 2>/dev/null
+            cp -f "$GAMEDIR/cover.png" "$cat_dir/$pdir/preview/MidBoss.png" 2>/dev/null
+        done
     fi
 done
 
-$ESUDO chmod +x "$GAMEDIR/tools/patchscript"
+$ESUDO chmod +x "$GAMEDIR/tools/patchscript" 2>/dev/null || true
+$ESUDO chmod +x "$GAMEDIR/tools/splash" 2>/dev/null || true
 
 # Setup Mono runtime
 monodir="$HOME/mono"
@@ -77,19 +82,22 @@ bind_directories ~/.local/share/MidBoss "$GAMEDIR/savedata"
 
 cd "$GAMEDIR/gamedata"
 
-# Remove bundled old Mono/System assemblies in favor of PortMaster Mono runtime
-rm -f mscorlib.dll System*.dll Mono*.dll 2>/dev/null || true
+# Remove bundled old Mono/System assemblies and old FNA in favor of PortMaster modern FNA and runtime
+rm -f mscorlib.dll System*.dll Mono*.dll FNA.dll FNA.dll.config monoconfig monomachineconfig 2>/dev/null || true
+rm -rf lib lib64 lib32 2>/dev/null || true
 
 # Environment variables for FNA & Mono
-export MONO_PATH="$GAMEDIR/gamedata:$monodir/lib/mono/4.5"
+export MONO_IOMAP=all
+export FNA_SDL2_FORCE_BASE_PATH=0
+export MONO_PATH="$GAMEDIR/dlls:$GAMEDIR/gamedata"
 export LD_LIBRARY_PATH="$GAMEDIR/libs:$monodir/lib:$LD_LIBRARY_PATH"
 export PATH="$monodir/bin:$PATH"
 export FNA3D_FORCE_DRIVER=OpenGL
 export FNA3D_OPENGL_FORCE_ES3=1
+export FNA3D_OPENGL_FORCE_VBO_DISCARD=1
 
 # Display loading splash
 if [ -f "$GAMEDIR/tools/splash" ] && [ -f "$GAMEDIR/splash.png" ]; then
-    $ESUDO chmod +x "$GAMEDIR/tools/splash"
     $ESUDO "$GAMEDIR/tools/splash" "$GAMEDIR/splash.png" 4000 &
 fi
 
@@ -97,7 +105,7 @@ fi
 $GPTOKEYB "mono" -c "$GAMEDIR/midboss.gptk" &
 pm_platform_helper "$monodir/bin/mono" >/dev/null
 
-$TASKSET mono MidBoss.exe 2>&1 | tee "$GAMEDIR/log.txt" /dev/tty0
+$TASKSET mono --ffast-math -O=all MidBoss.exe -novsync 2>&1 | tee "$GAMEDIR/log.txt" /dev/tty0
 
 # Cleanup
 $ESUDO kill -9 $(pidof gptokeyb) 2>/dev/null || true

@@ -65,9 +65,10 @@ if [ -n "$ZIP_FILE" ] && [ ! -f "$GAMEDATA/MidBoss.exe" ]; then
     unzip -o -q "$ZIP_FILE" -d "$GAMEDATA"
 fi
 
-# Remove incompatible x86 native binaries and old Mono runtime assemblies
+# Remove incompatible x86 native binaries, old configs, and old Mono/FNA runtime assemblies
 rm -f "$GAMEDATA/MidBoss.bin.x86" "$GAMEDATA/MidBoss.bin.x86_64" "$GAMEDATA/MidBoss" 2>/dev/null || true
 rm -f "$GAMEDATA/mscorlib.dll" "$GAMEDATA/System"*.dll "$GAMEDATA/Mono"*.dll 2>/dev/null || true
+rm -f "$GAMEDATA/FNA.dll" "$GAMEDATA/FNA.dll.config" "$GAMEDATA/monoconfig" "$GAMEDATA/monomachineconfig" 2>/dev/null || true
 rm -rf "$GAMEDATA/lib64" "$GAMEDATA/lib32" "$GAMEDATA/lib" "$GAMEDATA/share" 2>/dev/null || true
 
 if [ -f "$GAMEDATA/MidBoss.exe" ]; then
