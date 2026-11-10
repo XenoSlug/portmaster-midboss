@@ -2,6 +2,8 @@
 
 Port of **MidBoss** by Kitsune Games for PortMaster-compatible Linux handheld gaming devices (muOS, ArkOS, AmberELEC, ROCKNIX, JELOS, etc.).
 
+[![Download PortMaster Zip](https://img.shields.io/badge/Download-midboss.zip-blue?style=for-the-badge&logo=github)](https://github.com/XenoSlug/portmaster-midboss/releases/latest/download/midboss.zip)
+
 ## About the Game
 *MidBoss* is a turn-based tactical roguelike about playing the ultimate underdog: an ambitious imp trapped in a dungeon who seeks to overthrow the dungeon master. By defeating other dungeon creatures, you can possess their bodies, gain their abilities, and use their powers to battle deeper into the dungeon!
 
@@ -12,18 +14,19 @@ Port of **MidBoss** by Kitsune Games for PortMaster-compatible Linux handheld ga
 
 ## Installation Instructions
 
-### Option 1: Automatic Setup on Device (Easiest)
-1. Download or clone this port repository.
-2. Copy `MidBoss.sh` and the `midboss/` folder into your handheld's `/roms/ports/` directory (or `/ports/` depending on your OS).
-3. Place your purchased `MidBoss-Linux-142-bin` (or game zip) into `/roms/ports/midboss/gamedata/`.
-4. Launch **MidBoss** from your Ports menu. PortMaster will extract the game data and configure it on first launch.
+### Option 1: PortMaster Autoinstall (Recommended)
+1. Download [**`midboss.zip`**](https://github.com/XenoSlug/portmaster-midboss/releases/latest/download/midboss.zip) from the latest release.
+2. Copy `midboss.zip` directly into your handheld SD card under `/roms/ports/autoinstall/` (or `/ports/autoinstall/`).
+3. Boot PortMaster or your handheld to allow PortMaster to extract the files.
+4. Place your purchased `MidBoss-Linux-142-bin` (or game zip) into `/roms/ports/midboss/gamedata/`.
+5. Launch **MidBoss** from the Ports menu! The game will extract and configure automatically on first launch.
 
 ### Option 2: Pre-assemble on Mac / PC
 1. Run the included `tools/extract_midboss.py` on your computer:
    ```bash
    python3 tools/extract_midboss.py /path/to/MidBoss-Linux-142-bin
    ```
-2. Transfer the populated `gamedata/` folder, `MidBoss.sh`, and `midboss/` to your handheld SD card.
+2. Transfer the populated `gamedata/` folder, `MidBoss.sh`, and `midboss/` to your handheld SD card under `/roms/ports/`.
 
 ## Controls
 
