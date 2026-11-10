@@ -77,12 +77,21 @@ bind_directories ~/.local/share/MidBoss "$GAMEDIR/savedata"
 
 cd "$GAMEDIR/gamedata"
 
+# Remove bundled old Mono/System assemblies in favor of PortMaster Mono runtime
+rm -f mscorlib.dll System*.dll Mono*.dll 2>/dev/null || true
+
 # Environment variables for FNA & Mono
 export MONO_PATH="$GAMEDIR/gamedata:$monodir/lib/mono/4.5"
 export LD_LIBRARY_PATH="$GAMEDIR/libs:$monodir/lib:$LD_LIBRARY_PATH"
 export PATH="$monodir/bin:$PATH"
 export FNA3D_FORCE_DRIVER=OpenGL
 export FNA3D_OPENGL_FORCE_ES3=1
+
+# Display loading splash
+if [ -f "$GAMEDIR/tools/splash" ] && [ -f "$GAMEDIR/splash.png" ]; then
+    $ESUDO chmod +x "$GAMEDIR/tools/splash"
+    $ESUDO "$GAMEDIR/tools/splash" "$GAMEDIR/splash.png" 4000 &
+fi
 
 # Launch gptokeyb
 $GPTOKEYB "mono" -c "$GAMEDIR/midboss.gptk" &
