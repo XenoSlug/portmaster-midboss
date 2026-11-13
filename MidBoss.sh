@@ -52,6 +52,7 @@ for cat_dir in "/mnt/mmc/MUOS/info/catalogue" "/mnt/sdcard/MUOS/info/catalogue";
 done
 
 $ESUDO chmod +x "$GAMEDIR/tools/patchscript" 2>/dev/null || true
+$ESUDO chmod +x "$GAMEDIR/tools/extract_midboss.py" 2>/dev/null || true
 $ESUDO chmod +x "$GAMEDIR/tools/splash" 2>/dev/null || true
 
 # Setup Mono runtime

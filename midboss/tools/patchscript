@@ -1,83 +1,27 @@
 #!/bin/bash
-# MidBoss PortMaster Asset Preparation Script
-GAMEDIR="$PWD"
-GAMEDATA="$GAMEDIR/gamedata"
+# ==============================================================================
+# MidBoss Asset Preparation Script
+# ==============================================================================
+
+GAMEDIR="$(cd "$(dirname "$0")/.." && pwd)"
 LOGFILE="$GAMEDIR/patchlog.txt"
-TMPDIR="$GAMEDIR/tmp_patch"
 
 exec > >(tee -a "$LOGFILE") 2>&1
 echo "=== Starting MidBoss asset preparation ==="
 echo "Working directory: $GAMEDIR"
 
-mkdir -p "$TMPDIR"
-mkdir -p "$GAMEDATA"
+# Ensure python extract script is executable
+chmod +x "$GAMEDIR/tools/extract_midboss.py" 2>/dev/null || true
 
-cleanup() {
-    rm -rf "$TMPDIR"
-}
-trap cleanup EXIT
+# Run python extraction script
+python3 "$GAMEDIR/tools/extract_midboss.py"
+RET=$?
 
-# 1. Search for MidBoss Linux binary or archive in gamedata or gamedir
-BIN_FILE=$(find "$GAMEDATA" "$GAMEDIR" -maxdepth 2 -iname "*midboss*bin*" | head -n 1)
-
-if [ -n "$BIN_FILE" ]; then
-    echo "Found MidBoss Linux installer/binary: $BIN_FILE"
-    python3 - <<EOF
-import os, zipfile
-
-bin_path = "$BIN_FILE"
-out_dir = "$GAMEDATA"
-tmp_dir = "$TMPDIR"
-
-with open(bin_path, "rb") as f:
-    data = f.read()
-
-# Scan for PK\x03\x04 zip signature
-pos = data.find(b"PK\x03\x04")
-if pos != -1:
-    print(f"Found embedded zip at offset {pos}. Extracting...")
-    zip_path = os.path.join(tmp_dir, "midboss_data.zip")
-    with open(zip_path, "wb") as zf:
-        zf.write(data[pos:])
-    with zipfile.ZipFile(zip_path, "r") as z:
-        z.extractall(tmp_dir)
-
-    extracted_data = os.path.join(tmp_dir, "data")
-    if os.path.exists(extracted_data):
-        for item in os.listdir(extracted_data):
-            src_item = os.path.join(extracted_data, item)
-            dst_item = os.path.join(out_dir, item)
-            if os.path.exists(dst_item):
-                if os.path.isdir(dst_item):
-                    import shutil
-                    shutil.rmtree(dst_item)
-                else:
-                    os.remove(dst_item)
-            os.rename(src_item, dst_item)
-            print(f"Moved {item} to gamedata")
-EOF
-fi
-
-# Also check for standard zip archive in gamedata or gamedir
-ZIP_FILE=$(find "$GAMEDATA" "$GAMEDIR" -maxdepth 2 -iname "*midboss*.zip" | head -n 1)
-if [ -n "$ZIP_FILE" ] && [ ! -f "$GAMEDATA/MidBoss.exe" ]; then
-    echo "Extracting zip archive: $ZIP_FILE"
-    unzip -o -q "$ZIP_FILE" -d "$GAMEDATA"
-fi
-
-# Remove incompatible x86 native binaries, old configs, and old Mono/FNA runtime assemblies
-rm -f "$GAMEDATA/MidBoss.bin.x86" "$GAMEDATA/MidBoss.bin.x86_64" "$GAMEDATA/MidBoss" 2>/dev/null || true
-rm -f "$GAMEDATA/mscorlib.dll" "$GAMEDATA/System"*.dll "$GAMEDATA/Mono"*.dll 2>/dev/null || true
-rm -f "$GAMEDATA/FNA.dll" "$GAMEDATA/FNA.dll.config" "$GAMEDATA/monoconfig" "$GAMEDATA/monomachineconfig" 2>/dev/null || true
-rm -rf "$GAMEDATA/lib64" "$GAMEDATA/lib32" "$GAMEDATA/lib" "$GAMEDATA/share" 2>/dev/null || true
-
-if [ -f "$GAMEDATA/MidBoss.exe" ]; then
-    echo "MidBoss.exe successfully installed and configured!"
+if [ $RET -eq 0 ] && [ -f "$GAMEDIR/gamedata/MidBoss.exe" ]; then
+    echo "MidBoss asset preparation succeeded!"
     touch "$GAMEDIR/install_completed"
-    # Remove installer binary to save SD space
-    [ -n "$BIN_FILE" ] && rm -f "$BIN_FILE" 2>/dev/null || true
     exit 0
 else
-    echo "ERROR: MidBoss.exe not found after extraction!"
+    echo "ERROR: MidBoss asset preparation failed with code $RET!"
     exit 1
 fi
