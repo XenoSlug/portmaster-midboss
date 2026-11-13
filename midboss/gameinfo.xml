@@ -3,7 +3,9 @@
   <game>
     <path>./MidBoss.sh</path>
     <name>MidBoss</name>
-    <desc>Kill your enemies, possess their bodies, and take their abilities to become the ultimate dungeon boss in this tactical roguelike.</desc>
+    <desc>Tactical turn-based dungeon crawler where an imp defeats and possesses monsters to climb the ranks.</desc>
+    <image>./midboss/screenshot.png</image>
+    <thumbnail>./midboss/cover.png</thumbnail>
     <releasedate>20170523T000000</releasedate>
     <developer>Kitsune Games</developer>
     <publisher>Kitsune Games</publisher>

@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "midboss.zip",
   "items": [
     "MidBoss.sh",
@@ -11,21 +11,20 @@
     "porter": [
       "XenoSlug"
     ],
-    "desc": "Kill your enemies, possess their bodies, and take their abilities to become the ultimate dungeon boss in this tactical roguelike.",
-    "desc_md": null,
+    "desc": "Tactical turn-based dungeon crawler where an imp defeats and possesses monsters to climb the ranks.",
     "inst": "Place your purchased MidBoss Linux binary (MidBoss-Linux-142-bin) into the 'midboss/gamedata' folder. The port will automatically extract and configure the game on first launch.",
-    "inst_md": "1. Purchase MidBoss from [itch.io](https://kitsunegames.itch.io/midboss) or [Steam](https://store.steampowered.com/app/561740/MidBoss/).\n2. Place `MidBoss-Linux-142-bin` (or extracted game files) into `ports/midboss/gamedata/`.\n3. Launch **MidBoss** from PortMaster to auto-extract and play!",
     "genres": [
       "rpg",
       "roguelike"
     ],
-    "image": null,
+    "image": {
+      "screenshot": "screenshot.png",
+      "cover": "cover.png"
+    },
     "rtr": false,
     "exp": false,
     "runtime": "mono-6.12.0.122-aarch64.squashfs",
     "reqs": [],
-    "arch": [
-      "aarch64"
-    ]
+    "arch": []
   }
 }
