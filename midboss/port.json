@@ -5,7 +5,9 @@
     "MidBoss.sh",
     "midboss"
   ],
-  "items_opt": [],
+  "items_opt": [
+    "MidBoss.png"
+  ],
   "attr": {
     "title": "MidBoss",
     "porter": [
